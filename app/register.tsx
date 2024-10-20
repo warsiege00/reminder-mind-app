@@ -1,10 +1,10 @@
 import { useSession } from '@/contexts/ctx';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, ActivityIndicator, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 
 const RegisterScreen: React.FC = () => {
-  const { signUp, isLoading, session } = useSession();  // Aqui mudamos para `signUp`
+  const { signUp, isLoading, session } = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -12,29 +12,33 @@ const RegisterScreen: React.FC = () => {
 
   const handleRegister = async () => {
     setError(null);
-
     // Verificação se as senhas coincidem
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError('As senhas não coincidem.');
       return;
     }
 
     try {
-      await signUp(email, password);  // Usando o signUp ao invés do signIn
+      await signUp(email, password);
     } catch (err) {
-      setError('Failed to register. Please check your details.');
+      setError('Falha ao registrar. Por favor, verifique seus dados.');
     }
   };
 
-  // Se o usuário já estiver autenticado, redirecionar para outra tela
-  if (session) {
-    router.replace('/');
-    return null; // Ou redirecione o usuário para outra tela
-  }
+  // Redireciona se o usuário já estiver autenticado
+  
+  useEffect(() => {
+    console.log(`Register - session: ${session}`)
+    console.log(`Register - isLoading: ${isLoading}`)
+    if (session && !isLoading) {
+      console.log(`Entrou`)
+      router.replace('/');
+    }
+  }, [session, isLoading]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
+      <Text style={styles.title}>Registrar</Text>
       {error && <Text style={styles.error}>{error}</Text>}
       <TextInput
         style={styles.input}
@@ -46,14 +50,14 @@ const RegisterScreen: React.FC = () => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder="Senha"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
       <TextInput
         style={styles.input}
-        placeholder="Confirm Password"
+        placeholder="Confirme a Senha"
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry
@@ -61,7 +65,7 @@ const RegisterScreen: React.FC = () => {
       {isLoading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
-        <Button title="Register" onPress={handleRegister} />
+        <Button title="Registrar" onPress={handleRegister} />
       )}
     </View>
   );

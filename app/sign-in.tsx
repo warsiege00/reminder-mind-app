@@ -4,7 +4,7 @@ import { View, Text, TextInput, Button, ActivityIndicator, StyleSheet } from 're
 import { router } from 'expo-router';
 
 const LoginScreen: React.FC = () => {
-  const { signIn, isLoading, session, setIsLoading } = useSession();
+  const { signIn, isLoading, session } = useSession();
   const [email, setEmail] = useState('matheus@mail.com');
   const [password, setPassword] = useState('123456');
   const [error, setError] = useState<string | null>(null);
@@ -18,18 +18,10 @@ const LoginScreen: React.FC = () => {
     }
   };
 
-  // Se o usuário já estiver autenticado, redirecionar para outra tela
-  // if (session && ) {
-  //   // Lógica para redirecionar o usuário, por exemplo, usando React Navigation
-  //   router.replace('/');
-  //   return null; // Ou redirecione o usuário para outra tela
-  // }
-  
   useEffect(() => {
-    console.log(`session: ${session}`)
-    console.log(`Carregando: ${isLoading}`)
-    if (session && isLoading) {
-      setIsLoading(false);
+    console.log(`Login - Session: ${session}`)
+    console.log(`Login - IsLoading: ${isLoading}`)
+    if (session && !isLoading) {
       console.log(`Entrou`)
       router.replace('/');
     }
@@ -59,6 +51,7 @@ const LoginScreen: React.FC = () => {
       ) : (
         <Button title="Login" onPress={handleLogin} />
       )}
+      <Button title="Não tem uma conta? Registre-se aqui." onPress={() => router.push('/register')} />
     </View>
   );
 };
@@ -85,6 +78,12 @@ const styles = StyleSheet.create({
     color: 'red',
     marginBottom: 12,
     textAlign: 'center',
+  },
+  link: {
+    color: 'blue',
+    marginTop: 12,
+    textAlign: 'center',
+    textDecorationLine: 'underline',
   },
 });
 

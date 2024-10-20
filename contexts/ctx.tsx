@@ -9,7 +9,6 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   session: string | null;
   isLoading: boolean;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,19 +32,27 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       setSession(userCredential.user.uid); // Armazenando o ID do usuário como sessão
+      
     } catch (error) {
       console.error('Error signing in:', error);
+    }
+    finally{
+      setIsLoading(false);
     }
   };
 
   // Função de registro (sign-up)
   const signUp = async (email: string, password: string) => {
     setSession(null); // Limpa a sessão antes de iniciar o carregamento
+    setIsLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       setSession(userCredential.user.uid); // Armazenando o ID do usuário após o registro
     } catch (error) {
       console.error('Error signing up:', error);
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
@@ -57,6 +64,9 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
       setSession(null); // Limpar sessão
     } catch (error) {
       console.error('Error signing out:', error);
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
@@ -74,7 +84,7 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ signIn, signUp, signOut, session, isLoading, setIsLoading }}>
+    <AuthContext.Provider value={{ signIn, signUp, signOut, session, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
