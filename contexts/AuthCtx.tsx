@@ -9,6 +9,7 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   session: string | null;
   isLoading: boolean;
+  isFirstAccess: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,6 +25,7 @@ export function useSession() {
 export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [session, setSession] = useStorageState('session');
   const [isLoading, setIsLoading] = useState(false);
+  const [isFirstAccess, setIsFirstAccess] = useState(false);
 
   // Função de login
   const signIn = async (email: string, password: string) => {
@@ -84,7 +86,7 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ signIn, signUp, signOut, session, isLoading }}>
+    <AuthContext.Provider value={{ signIn, signUp, signOut, session, isLoading, isFirstAccess }}>
       {children}
     </AuthContext.Provider>
   );

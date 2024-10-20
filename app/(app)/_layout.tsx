@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { Redirect, Stack } from 'expo-router';
-import { useSession } from '@/contexts/ctx';
+import { Redirect, router, Stack } from 'expo-router';
+import { useSession } from '@/contexts/AuthCtx';
 import { useEffect } from 'react';
 
 
 export default function AppLayout() {
-  const { session, isLoading } = useSession();
+  const { session, isLoading, isFirstAccess } = useSession();
 
   // You can keep the splash screen open, or render a loading screen like we do here.
   if (isLoading) {
@@ -22,9 +22,13 @@ export default function AppLayout() {
     return <Redirect href="/sign-in" />;
   }
 
+
   useEffect(() => {
     console.log(`INdex APP: ${session}`)
-  }, [session]);
+    if(session && isFirstAccess){
+      router.replace('/OnBoarding');
+    }
+  }, [session, isFirstAccess]);
   // });
 
   // This layout can be deferred because it's not the root layout.

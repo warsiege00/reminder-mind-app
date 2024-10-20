@@ -1,9 +1,11 @@
-import { useSession } from '@/contexts/ctx';
+import { useSession } from '@/contexts/AuthCtx';
+import { router } from 'expo-router';
 import { Text, View } from 'react-native';
 
 
 export default function Index() {
   const { signOut } = useSession();
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text

@@ -1,4 +1,4 @@
-import { useSession } from '@/contexts/ctx';
+import { useSession } from '@/contexts/AuthCtx';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, ActivityIndicator, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
