@@ -1,4 +1,4 @@
-import { Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Redirect, Stack } from 'expo-router';
 import { useSession } from '@/contexts/ctx';
 import { useEffect } from 'react';
@@ -9,7 +9,9 @@ export default function AppLayout() {
 
   // You can keep the splash screen open, or render a loading screen like we do here.
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={styles.container}><Text>Loading...</Text></View>
+    );
   }
 
   // Only require authentication within the (app) group's layout as users
@@ -21,10 +23,18 @@ export default function AppLayout() {
   }
 
   useEffect(() => {
-    console.log(session)
-  // }, [session]);
-  });
+    console.log(`INdex APP: ${session}`)
+  }, [session]);
+  // });
 
   // This layout can be deferred because it's not the root layout.
   return <Stack />;
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 16,
+  },
+});

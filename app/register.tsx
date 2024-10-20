@@ -1,43 +1,40 @@
 import { useSession } from '@/contexts/ctx';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, Button, ActivityIndicator, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 
-const LoginScreen: React.FC = () => {
-  const { signIn, isLoading, session, setIsLoading } = useSession();
-  const [email, setEmail] = useState('matheus@mail.com');
-  const [password, setPassword] = useState('123456');
+const RegisterScreen: React.FC = () => {
+  const { signUp, isLoading, session } = useSession();  // Aqui mudamos para `signUp`
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     setError(null);
+
+    // Verificação se as senhas coincidem
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
     try {
-      await signIn(email, password);
+      await signUp(email, password);  // Usando o signUp ao invés do signIn
     } catch (err) {
-      setError('Failed to log in. Please check your credentials.');
+      setError('Failed to register. Please check your details.');
     }
   };
 
   // Se o usuário já estiver autenticado, redirecionar para outra tela
-  // if (session && ) {
-  //   // Lógica para redirecionar o usuário, por exemplo, usando React Navigation
-  //   router.replace('/');
-  //   return null; // Ou redirecione o usuário para outra tela
-  // }
-  
-  useEffect(() => {
-    console.log(`session: ${session}`)
-    console.log(`Carregando: ${isLoading}`)
-    if (session && isLoading) {
-      setIsLoading(false);
-      console.log(`Entrou`)
-      router.replace('/');
-    }
-  }, [session, isLoading]);
+  if (session) {
+    router.replace('/');
+    return null; // Ou redirecione o usuário para outra tela
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Register</Text>
       {error && <Text style={styles.error}>{error}</Text>}
       <TextInput
         style={styles.input}
@@ -54,10 +51,17 @@ const LoginScreen: React.FC = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+      />
       {isLoading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
-        <Button title="Login" onPress={handleLogin} />
+        <Button title="Register" onPress={handleRegister} />
       )}
     </View>
   );
@@ -88,4 +92,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default RegisterScreen;

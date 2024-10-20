@@ -1,14 +1,13 @@
-import  { useEffect, useCallback, useReducer } from 'react';
+import { useEffect, useCallback, useReducer } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
-type UseStateHook<T> = [[boolean, T | null], (value: T | null) => void];
+type UseStateHook<T> = [T | null, (value: T | null) => void];
 
-function useAsyncState<T>(
-  initialValue: [boolean, T | null] = [true, null],
-): UseStateHook<T> {
+// Alteração no hook para remover o booleano
+function useAsyncState<T>(initialValue: T | null = null): UseStateHook<T> {
   return useReducer(
-    (state: [boolean, T | null], action: T | null = null): [boolean, T | null] => [false, action],
+    (state: T | null, action: T | null = null): T | null => action,
     initialValue
   ) as UseStateHook<T>;
 }
@@ -39,19 +38,24 @@ export function useStorageState(key: string): UseStateHook<string> {
 
   // Get
   useEffect(() => {
-    if (Platform.OS === 'web') {
-      try {
-        if (typeof localStorage !== 'undefined') {
-          setState(localStorage.getItem(key));
+    const loadStorageItem = async () => {
+      let value: string | null = null;
+
+      if (Platform.OS === 'web') {
+        try {
+          if (typeof localStorage !== 'undefined') {
+            value = localStorage.getItem(key);
+          }
+        } catch (e) {
+          console.error('Local storage is unavailable:', e);
         }
-      } catch (e) {
-        console.error('Local storage is unavailable:', e);
+      } else {
+        value = await SecureStore.getItemAsync(key);
       }
-    } else {
-      SecureStore.getItemAsync(key).then(value => {
-        setState(value);
-      });
-    }
+      setState(value);
+    };
+
+    loadStorageItem();
   }, [key]);
 
   // Set
