@@ -1,8 +1,22 @@
+import { useEffect, useState } from 'react';
 import { SessionProvider } from '@/contexts/AuthCtx';
-import { Slot } from 'expo-router';
+import { Slot } from './util/Slot';
+
+
 
 export default function Root() {
-  // Set up the auth context and render our layout inside of it.
+  const [isMounted, setIsMounted] = useState(false);
+  ; // Aqui você pode obter o valor real da sessão, se necessário
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    // Renderiza um componente vazio ou uma tela de carregamento temporária
+    return null;
+  }
+
   return (
     <SessionProvider>
       <Slot />

@@ -1,15 +1,16 @@
 import React, { useContext, createContext, PropsWithChildren, useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as firebaseSignOut, User } from 'firebase/auth';
 import { auth } from '../lib/firebase';
-import { useStorageState } from '../hooks/useStorageState';
+// import { useStorageState } from '../hooks/useStorageState';
 
 interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   session: string | null;
-  isLoading: boolean;
-  isFirstAccess: boolean;
+  error:any;
+  // isLoading: boolean;
+  // isFirstAccess: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,14 +24,16 @@ export function useSession() {
 }
 
 export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [session, setSession] = useStorageState('session');
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFirstAccess, setIsFirstAccess] = useState(false);
+  // const [session, setSession] = useStorageState('session');
+  const [session, setSession] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [isFirstAccess, setIsFirstAccess] = useState(false);
 
   // Função de login
   const signIn = async (email: string, password: string) => {
     setSession(null); // Limpa a sessão antes de iniciar o carregamento
-    setIsLoading(true);
+    // setIsLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       setSession(userCredential.user.uid); // Armazenando o ID do usuário como sessão
@@ -39,14 +42,14 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
       console.error('Error signing in:', error);
     }
     finally{
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
   // Função de registro (sign-up)
   const signUp = async (email: string, password: string) => {
     setSession(null); // Limpa a sessão antes de iniciar o carregamento
-    setIsLoading(true);
+    // setIsLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       setSession(userCredential.user.uid); // Armazenando o ID do usuário após o registro
@@ -54,7 +57,7 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
       console.error('Error signing up:', error);
     }
     finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
@@ -66,27 +69,29 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
       setSession(null); // Limpar sessão
     } catch (error) {
       console.error('Error signing out:', error);
+
+      setError(error as any);
     }
     finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
   // Listener para monitorar o estado de autenticação do Firebase
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user: User | null) => {
-      if (user) {
-        setSession(user.uid); // Armazenar ID do usuário na sessão
-      } else {
-        setSession(null); // Limpar sessão se não houver usuário
+      if (user && session !== user.uid) {
+        setSession(user.uid); // Armazenar ID do usuário na sessão apenas se diferente
+      } else if (!user && session !== null) {
+        setSession(null); // Limpar sessão apenas se já não for null
       }
     });
 
     return () => unsubscribe(); // Limpar listener ao desmontar
-  }, []);
+  }, [session]);
 
   return (
-    <AuthContext.Provider value={{ signIn, signUp, signOut, session, isLoading, isFirstAccess }}>
+    <AuthContext.Provider value={{ signIn, signUp, signOut, session, error}}>
       {children}
     </AuthContext.Provider>
   );

@@ -4,7 +4,7 @@ import { View, Text, TextInput, Button, ActivityIndicator, StyleSheet } from 're
 import { router } from 'expo-router';
 
 const LoginScreen: React.FC = () => {
-  const { signIn, isLoading, session } = useSession();
+  const { signIn, session } = useSession();
   const [email, setEmail] = useState('matheus@mail.com');
   const [password, setPassword] = useState('123456');
   const [error, setError] = useState<string | null>(null);
@@ -18,14 +18,14 @@ const LoginScreen: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(`Login - Session: ${session}`)
-    console.log(`Login - IsLoading: ${isLoading}`)
-    if (session && !isLoading) {
-      console.log(`Entrou`)
-      router.replace('/');
-    }
-  }, [session, isLoading]);
+  // useEffect(() => {
+  //   console.log(`Login - Session: ${session}`)
+  //   // console.log(`Login - IsLoading: ${isLoading}`)
+  //   // if (session && !isLoading) {
+  //   //   console.log(`Entrou`)
+  //   //   router.replace('/');
+  //   // }
+  // }, [session]);
 
   return (
     <View style={styles.container}>
@@ -46,11 +46,12 @@ const LoginScreen: React.FC = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      {isLoading ? (
+      {/* {isLoading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <Button title="Login" onPress={handleLogin} />
-      )}
+      )} */}
+       <Button title="Login" onPress={handleLogin} />
       <Button title="Não tem uma conta? Registre-se aqui." onPress={() => router.push('/register')} />
     </View>
   );
