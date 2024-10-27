@@ -2,16 +2,15 @@
 
 import React from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
-import { Text, FAB } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { useReminders } from '@/hooks/useReminders';
 import ReminderInfo from '@/components/ReminderInfo';
 import { Loader } from '@/components/ui/Loader';
 
 
-const HomeScreen: React.FC = () => {
-  const { reminders, loading} = useReminders();
+const ReminderScreen: React.FC = () => {
+  const { reminder, loading} = useReminders();
  
-
   if (loading) {
     return <Loader />;
   }
@@ -20,9 +19,8 @@ const HomeScreen: React.FC = () => {
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Seu Lembrete Conscientes</Text>
       {
-        reminders && reminders.map((reminder) => {
-          return <Text>{reminder.title}</Text>
-        })}
+        reminder ? <ReminderInfo reminder={reminder} /> : <Text>Nenhum lembrete encontrado.</Text>
+      }
     </ScrollView>
   );
 };
@@ -59,4 +57,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default HomeScreen;
+export default ReminderScreen;

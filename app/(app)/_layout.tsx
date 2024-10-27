@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { Redirect, router, Tabs } from 'expo-router';
+import { Tabs } from 'expo-router';
 import { useSession } from '@/contexts/AuthCtx';
-import { useEffect } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
-
+import { IconButton } from 'react-native-paper';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { useNotificationObserver } from '../../hooks/useNotifications'
 
 export default function AppLayout() {
   const { session } = useSession();
   console.log('entrou no (app)')
-
+  useNotificationObserver();
   // // You can keep the splash screen open, or render a loading screen like we do here.
   // if (isLoading) {
   //   return (
@@ -18,12 +18,12 @@ export default function AppLayout() {
 
   // Only require authentication within the (app) group's layout as users
   // need to be able to access the (auth) group and sign in again.
-  if (!session) {
-    // On web, static rendering will stop here as the user is not authenticated
-    // in the headless Node process that the pages are rendered in.
-    console.log('Redirect')
-    return <Redirect href="/sign-in" />;
-  }
+  // if (!session) {
+  //   // On web, static rendering will stop here as the user is not authenticated
+  //   // in the headless Node process that the pages are rendered in.
+  //   console.log('Redirect')
+  //   return <Redirect href="/sign-in" />;
+  // }
 
 
   // useEffect(() => {
@@ -36,6 +36,7 @@ export default function AppLayout() {
 
   // This layout can be deferred because it's not the root layout.
   return  (
+    
     <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
       <Tabs.Screen
         name="index"
@@ -57,14 +58,28 @@ export default function AppLayout() {
           href: null,
         }}
       />
+      <Tabs.Screen
+        name="notification/mood-checker"
+        options={{
+          href: null, // Oculta o botão de navegação do Tab Bar
+          title: 'Mood Checker',
+        }}
+      />
+    
+      <Tabs.Screen
+        name="meditation/[id]"
+        options={({ navigation }: NativeStackScreenProps<any>) => ({
+          href: null, // Hides this screen from the tab bar
+          title: 'Detalhes',
+          tabBarButton: () => null, // Prevents a tab button from rendering for this screen
+          headerLeft: () => (
+            <IconButton
+              icon="arrow-left"
+              onPress={() => navigation.goBack()} // Allows navigating back
+            />
+          ),
+        })}
+      />
     </Tabs>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-  },
-});
