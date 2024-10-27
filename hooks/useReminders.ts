@@ -4,20 +4,25 @@ import { useSession } from '@/contexts/AuthCtx';
 import { Reminder } from '@/core/models/reminder.model';
 import { useState, useEffect } from 'react';
 
-export const useReminders = () => {
+export const useReminder = () => {
   const [loading, setLoading] = useState(true);
   const { session } = useSession();
   const [interval, setInterval] = useState<number>(5);
-  const [reminders, setReminders] = useState<Reminder[]>([]);
+  const [reminder, setReminder] = useState<Reminder>();
   
 
   const fetchReminders = async () => {
     setLoading(true);
     try {
-      const response = await new Promise<Reminder[]>(resolve =>
-        setTimeout(() => resolve(reminders), 1000)
+      const response = await new Promise<Reminder>(resolve =>
+        setTimeout(() => resolve(
+          {
+            inscriptions: [],
+            interval: interval,
+            userUID: session ? session : ''
+          }), 1000)
       );
-      setReminders(response);
+      setReminder(response);
     } catch (error) {
       console.error('Failed to fetch reminders:', error);
     } finally {
@@ -27,7 +32,7 @@ export const useReminders = () => {
 
   useEffect(() => {
     fetchReminders();
-  }, [reminders]);
+  }, [reminder]);
 
-  return { reminders, loading };
+  return { reminder, loading };
 };

@@ -3,13 +3,21 @@
 import React from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import { Text } from 'react-native-paper';
-import { useReminders } from '@/hooks/useReminders';
 import ReminderInfo from '@/components/ReminderInfo';
 import { Loader } from '@/components/ui/Loader';
+import { useReminder } from '@/hooks/useReminders';
+import { useWork } from '@/hooks/useWorks';
+import { useLocalSearchParams } from 'expo-router';
+import { MeditationList } from '@/components/MeditationList';
+import { Meditation } from '@/core/models/meditation.model';
+
 
 
 const ReminderScreen: React.FC = () => {
-  const { reminder, loading} = useReminders();
+  const { id } = useLocalSearchParams();
+  const { getWorkById, loading} = useWork();
+  const work = getWorkById(id as string);
+
  
   if (loading) {
     return <Loader />;
@@ -17,9 +25,14 @@ const ReminderScreen: React.FC = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Seu Lembrete Conscientes</Text>
+      <Text style={styles.title}>Obras e autores</Text>
       {
-        reminder ? <ReminderInfo reminder={reminder} /> : <Text>Nenhum lembrete encontrado.</Text>
+        work ? <Text>{work.title}</Text>: <Text>Nenhuma obra encontrada.</Text>
+      }
+      {
+        loading ? <Loader /> : (
+            <MeditationList meditations={work?.meditations} />
+        )
       }
     </ScrollView>
   );

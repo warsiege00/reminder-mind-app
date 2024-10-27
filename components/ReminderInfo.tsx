@@ -32,7 +32,7 @@ const ReminderInfo = ({ reminder }: IReminderInfo) => {
     <View>
         <Card style={styles.card}>
             <Card.Content>
-                <Title style={styles.title}>{reminder.title}</Title>
+                <Title style={styles.title}>{reminder.userUID}</Title>
                 <Paragraph style={styles.userUID}>User ID: {reminder.userUID}</Paragraph>
                 <Paragraph style={styles.interval}>Interval: {reminder.interval} minutes</Paragraph>
                 <TextInput

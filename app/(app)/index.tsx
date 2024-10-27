@@ -3,14 +3,14 @@
 import React from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import { Text, FAB } from 'react-native-paper';
-import { useReminders } from '@/hooks/useReminders';
-import ReminderInfo from '@/components/ReminderInfo';
+import { useReminder } from '@/hooks/useReminders';
 import { Loader } from '@/components/ui/Loader';
+import { useWork } from '@/hooks/useWorks';
+import { Link } from 'expo-router';
 
 
 const HomeScreen: React.FC = () => {
-  const { reminders, loading} = useReminders();
- 
+  const { works, loading} = useWork();
 
   if (loading) {
     return <Loader />;
@@ -20,9 +20,17 @@ const HomeScreen: React.FC = () => {
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Seu Lembrete Conscientes</Text>
       {
-        reminders && reminders.map((reminder) => {
-          return <Text>{reminder.title}</Text>
-        })}
+        works && works.map((work) => {
+          return (
+            <Link 
+              href={{
+                pathname: '/work/[id]',
+                params: { id: work.id},
+              }}>
+              <Text key={work.id}>{work.title}</Text>
+            </Link>)
+        })
+      }
     </ScrollView>
   );
 };

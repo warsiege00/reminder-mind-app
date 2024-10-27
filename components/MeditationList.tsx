@@ -5,7 +5,7 @@ import { StyleSheet, View, ScrollView } from "react-native";
 import { Card, Chip, Paragraph, Text } from "react-native-paper";
 
 interface IMeditationList {
-  meditations: Meditation[] | null;
+  meditations: Meditation[] | undefined;
 }
 
 export const MeditationList = ({ meditations }: IMeditationList) => {
@@ -13,14 +13,14 @@ export const MeditationList = ({ meditations }: IMeditationList) => {
     <View style={styles.container}>
       {meditations && meditations.length > 0 ? (
         <>
-          <Text style={styles.title}>Lista de Meditações</Text>
+          <Text style={styles.title}>Meditações</Text>
           {meditations.map((item) => (
             <Card key={item.id} style={styles.card}>
               <Card.Content style={styles.cardContent}>
                 <Link
                   href={{
                     pathname: '/meditation/[id]',
-                    params: { id: item.id },
+                    params: { id: item.id, previousScreen: 'MoodChecker' },
                   }}
                   push
                 >
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 16,
     textAlign: 'center',

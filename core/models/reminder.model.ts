@@ -1,8 +1,8 @@
 import { Meditation } from "./meditation.model";
+import { Work } from "./work.model";
 
 export interface Reminder{
     userUID: string;
-    title: string;
-    meditations?: Meditation[] | null;
+    inscriptions: Work[];
     interval: number;
 }
