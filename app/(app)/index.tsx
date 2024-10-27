@@ -23,6 +23,8 @@ const HomeScreen: React.FC = () => {
         works && works.map((work) => {
           return (
             <Link 
+              push
+              key={work.id}
               href={{
                 pathname: '/work/[id]',
                 params: { id: work.id},

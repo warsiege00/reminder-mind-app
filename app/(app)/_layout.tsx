@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { router, Tabs } from 'expo-router';
 import { useSession } from '@/contexts/AuthCtx';
 import { FontAwesome } from '@expo/vector-icons';
 import { IconButton } from 'react-native-paper';
@@ -46,6 +46,32 @@ export default function AppLayout() {
         }}
       />
       <Tabs.Screen
+        name="work/index"
+        options={({ navigation }: NativeStackScreenProps<any>) => ({
+          title: 'Obras',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="book" color={color} />,
+          headerLeft: () => (
+            <IconButton
+              icon="arrow-left"
+              onPress={() => router.back()} // Allows navigating back
+            />
+          ),
+        })}
+      />
+      <Tabs.Screen
+        name="work/[id]"
+        options={({ navigation }: NativeStackScreenProps<any>) => ({
+          title: 'Detalhes da Obra',
+          tabBarButton: () => null, // Prevents a tab button from rendering for this screen
+          headerLeft: () => (
+            <IconButton
+              icon="arrow-left"
+              onPress={() => router.back()} // Allows navigating back
+            />
+          ),
+        })}
+      />
+      <Tabs.Screen
         name="settings"
         options={{
           title: 'Settings',
@@ -70,16 +96,18 @@ export default function AppLayout() {
         name="meditation/[id]"
         options={({ navigation }: NativeStackScreenProps<any>) => ({
           href: null, // Hides this screen from the tab bar
-          title: 'Detalhes',
+          title: 'Detalhes da meditação',
           tabBarButton: () => null, // Prevents a tab button from rendering for this screen
           headerLeft: () => (
             <IconButton
               icon="arrow-left"
-              onPress={() => navigation.goBack()} // Allows navigating back
+              onPress={() => {router.back();
+              }}
             />
           ),
         })}
       />
+      
     </Tabs>
   )
 }

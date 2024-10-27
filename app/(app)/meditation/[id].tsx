@@ -5,7 +5,7 @@ import { useLocalSearchParams } from "expo-router";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { Text, Card, Title, Paragraph, Chip } from "react-native-paper";
 
-const DetailScreen = ({ navigation }: any) => {
+const MeditationDetailScreen = ({ navigation }: any) => {
     const { id } = useLocalSearchParams();
     const { getMeditationById } = useMeditations();
 
@@ -89,4 +89,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DetailScreen;
+export default MeditationDetailScreen;

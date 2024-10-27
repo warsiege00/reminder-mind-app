@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meditation } from "@/core/models/meditation.model";
 import { Link } from "expo-router";
-import { StyleSheet, View, ScrollView } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Card, Chip, Paragraph, Text } from "react-native-paper";
 
 interface IMeditationList {
@@ -18,11 +18,12 @@ export const MeditationList = ({ meditations }: IMeditationList) => {
             <Card key={item.id} style={styles.card}>
               <Card.Content style={styles.cardContent}>
                 <Link
+                  push
+                  key={item.id}
                   href={{
                     pathname: '/meditation/[id]',
-                    params: { id: item.id, previousScreen: 'MoodChecker' },
+                    params: { id: item.id },
                   }}
-                  push
                 >
                   <Text style={styles.meditationTitle}>{item.title}</Text>
                   {/* <Chip icon="information">{item.moodRecommended}</Chip> */}
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   title: {
-    fontSize: 18,
+    fontSize: 2,
     fontWeight: 'bold',
     marginBottom: 16,
     textAlign: 'center',

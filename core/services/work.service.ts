@@ -6,12 +6,14 @@ export const WORK_MOCK: Work[] = [
         id: '1',
         title: 'Poder do Agora',
         description: 'Livro sobre Presença',
+        autor: 'Eckard Tolle',
         meditations: MEDITATION_MOCK
     },
     {
         id: '2',
-        title: 'Hábitos Atˆmicos',
+        title: 'Hábitos Atômicos',
         description: 'Livro sobre Habitos',
+        autor: 'James Clear',
         meditations: MEDITATION_MOCK_2
     }
 ]
