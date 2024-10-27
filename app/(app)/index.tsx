@@ -1,37 +1,38 @@
 // components/ReminderList.tsx
 
 import React from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
-import { Text, FAB } from 'react-native-paper';
+import { StyleSheet, ScrollView, View } from 'react-native';
+import { Text, FAB, Button } from 'react-native-paper';
 import { useReminder } from '@/hooks/useReminders';
 import { Loader } from '@/components/ui/Loader';
 import { useWork } from '@/hooks/useWorks';
 import { Link } from 'expo-router';
+import ReminderInfo from '@/components/ReminderInfo';
 
 
 const HomeScreen: React.FC = () => {
-  const { works, loading} = useWork();
+  const {reminder, loading} = useReminder();
 
   if (loading) {
     return <Loader />;
+  }
+
+  if(!reminder){
+    return 
   }
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Seu Lembrete Conscientes</Text>
       {
-        works && works.map((work) => {
-          return (
-            <Link 
-              push
-              key={work.id}
-              href={{
-                pathname: '/work/[id]',
-                params: { id: work.id},
-              }}>
-              <Text key={work.id}>{work.title}</Text>
-            </Link>)
-        })
+        reminder ? 
+          <ReminderInfo reminder={reminder} /> :
+          <View>
+            <Text>Nenhum lembrete configurado</Text>
+            <Link href={{pathname: '/work'}}>
+              <Button>Configurar</Button>
+            </Link>
+          </View>
       }
     </ScrollView>
   );

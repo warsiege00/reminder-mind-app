@@ -18,8 +18,10 @@ const MeditationDetailScreen = ({ navigation }: any) => {
                 <>
                     <Title style={styles.title}>{meditation.title}</Title>
                     <View style={{display: 'flex', alignItems: 'center', marginBottom: 10}}>
+                        <Text style={styles.chip}>Obra: {meditation.work}</Text>
                         <Text style={styles.mood}>Humor recomendado:</Text>
                         <Chip>{meditation.moodRecommended}</Chip>
+                        
                     </View>
                     
                     <Card style={styles.card}>
@@ -87,6 +89,13 @@ const styles = StyleSheet.create({
         lineHeight: 22,
         marginBottom: 4,
     },
+    chip: {
+        color: 'grey', 
+        fontWeight: 'bold', 
+        fontStyle: 'italic',
+        paddingVertical: 4,
+        textAlign: 'center',
+    }
 });
 
 export default MeditationDetailScreen;

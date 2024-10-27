@@ -4,6 +4,7 @@ import { Text, Card } from 'react-native-paper';
 import { Loader } from '@/components/ui/Loader';
 import { useWork } from '@/hooks/useWorks';
 import { Link } from 'expo-router';
+import { FontAwesome } from '@expo/vector-icons';
 
 const WorkList: React.FC = () => {
   const { works, loading } = useWork();
@@ -20,13 +21,13 @@ const WorkList: React.FC = () => {
           <View style={styles.cardWrapper} key={work.id}>
             <Card style={styles.cardContainer}>
               <Link
-                push
                 href={{
                   pathname: '/work/[id]',
                   params: { id: work.id },
                 }}
               >
                 <View style={styles.cardContent}>
+                  <Text style={{color: 'green', fontWeight: 'bold', padding: 10}}>Inscrito</Text>
                   <Text style={styles.workTitle}>{work.title}</Text>
                   <Text style={styles.workAuthor}>Autor: {work.autor}</Text>
                   <Text style={styles.workDescription}>{work.description}</Text>

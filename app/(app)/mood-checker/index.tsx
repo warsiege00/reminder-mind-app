@@ -2,7 +2,7 @@ import { MeditationList } from '@/components/MeditationList';
 import { Meditation } from '@/core/models/meditation.model';
 import { useMeditations } from '@/hooks/useMeditations';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { Button, Text, Title } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -19,25 +19,18 @@ const MoodChecker = () => {
   const [recommendedMeditation, setRecommendedMeditation] = useState<null | Meditation[]>(null);
   const {getAllRecommendedMeditationsByMood} = useMeditations();
 
-  const handleMoodSelect = (mood) => {
+  const handleMoodSelect = (mood: any) => {
     setSelectedMood(mood);
     console.log(mood)
     const data = getAllRecommendedMeditationsByMood(mood);
     setRecommendedMeditation(data);
-    // console.log(recommendedMeditation);
     
   };
 
-  useEffect(() => {
-    return () => {
-      // Este código é executado quando o componente é desmontado
-      setSelectedMood(null);
-    };
-  }, []);
   
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Title style={styles.title}>Qual é o seu estado de espírito?</Title>
       <View style={styles.buttonContainer}>
         {moodOptions.map((mood) => (
@@ -68,15 +61,13 @@ const MoodChecker = () => {
         <MeditationList meditations={recommendedMeditation} />
         : <Text>'Nenhuma meditação sugerida'</Text>
       }
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     padding: 20,
   },
   title: {

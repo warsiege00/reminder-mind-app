@@ -8,6 +8,7 @@ import { useNotificationObserver } from '../../hooks/useNotifications'
 export default function AppLayout() {
   const { session } = useSession();
   console.log('entrou no (app)')
+  console.log(session)
   useNotificationObserver();
   // // You can keep the splash screen open, or render a loading screen like we do here.
   // if (isLoading) {
@@ -34,7 +35,7 @@ export default function AppLayout() {
   // }, [session, isFirstAccess]);
   // });
 
-  // This layout can be deferred because it's not the root layout.
+
   return  (
     
     <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
@@ -50,12 +51,6 @@ export default function AppLayout() {
         options={({ navigation }: NativeStackScreenProps<any>) => ({
           title: 'Obras',
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="book" color={color} />,
-          headerLeft: () => (
-            <IconButton
-              icon="arrow-left"
-              onPress={() => router.back()} // Allows navigating back
-            />
-          ),
         })}
       />
       <Tabs.Screen
@@ -66,10 +61,17 @@ export default function AppLayout() {
           headerLeft: () => (
             <IconButton
               icon="arrow-left"
-              onPress={() => router.back()} // Allows navigating back
+              onPress={() => router.push('/(app)/work')} // Allows navigating back
             />
           ),
         })}
+      />
+      <Tabs.Screen
+        name="mood-checker/index"
+        options={{
+          title: 'Praticar',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="tasks" color={color} />,
+        }}
       />
       <Tabs.Screen
         name="settings"
@@ -84,24 +86,20 @@ export default function AppLayout() {
           href: null,
         }}
       />
-      <Tabs.Screen
-        name="notification/mood-checker"
-        options={{
-          href: null, // Oculta o botão de navegação do Tab Bar
-          title: 'Mood Checker',
-        }}
-      />
+      
     
       <Tabs.Screen
         name="meditation/[id]"
         options={({ navigation }: NativeStackScreenProps<any>) => ({
-          href: null, // Hides this screen from the tab bar
           title: 'Detalhes da meditação',
-          tabBarButton: () => null, // Prevents a tab button from rendering for this screen
+          tabBarButton: () => null, 
           headerLeft: () => (
             <IconButton
               icon="arrow-left"
-              onPress={() => {router.back();
+              onPress={() => {
+                console.log(navigation.getState())
+                // router.back();
+                navigation.goBack();
               }}
             />
           ),

@@ -1,6 +1,6 @@
 
 import { Meditation } from '@/core/models/meditation.model';
-import { MEDITATION_MOCK } from '@/core/services/meditation.service';
+import { MEDITATION_MOCK_FULL } from '@/core/services/meditation.service';
 import { useState, useEffect } from 'react';
 
 
@@ -12,7 +12,7 @@ export const useMeditations = () => {
     setLoading(true);
     try {
       const response = await new Promise<Meditation[]>(resolve =>
-        setTimeout(() => resolve(MEDITATION_MOCK), 1000)
+        setTimeout(() => resolve(MEDITATION_MOCK_FULL), 1000)
       );
       setMeditations(response);
     } catch (error) {

@@ -25,7 +25,7 @@ export function useSession() {
 
 export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
   // const [session, setSession] = useStorageState('session');
-  const [session, setSession] = useState<string | null>(null);
+  const [session, setSession] = useState<string | null>('OoLGqnf8N4c0UBnM2y46R0KRlln2');
   const [error, setError] = useState<string | null>(null);
   // const [isLoading, setIsLoading] = useState(false);
   // const [isFirstAccess, setIsFirstAccess] = useState(false);

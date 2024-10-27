@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import { Reminder } from '@/core/models/reminder.model';
 import {StyleSheet, View } from 'react-native';
-import { Card, Title, Paragraph, Button, TextInput } from 'react-native-paper';
-import { useMeditations } from '@/hooks/useMeditations';
-
+import { Card, Title, Paragraph, Button, TextInput, Text } from 'react-native-paper';
 import { Loader } from './ui/Loader';
-import { MeditationList } from './MeditationList';
 import { scheduleNotification } from '@/core/services/notification.service';
+import { Work } from '@/core/models/work.model';
 
 interface IReminderInfo {
     reminder: Reminder
 }
 
 const ReminderInfo = ({ reminder }: IReminderInfo) => {
-  const { meditations, loading } = useMeditations();
   const [interval, setInterval] = useState(reminder.interval);
 
   const handlePress = () => {
@@ -22,7 +19,7 @@ const ReminderInfo = ({ reminder }: IReminderInfo) => {
       title: "Hora de reconectar",
       body: "Bora exercitar a presença",
       data: {
-        url: "notification/mood-checker", // Dado adicional que pode ser usado para navegação
+        url: "mood-checker", 
       },
     }
     scheduleNotification(notificationContent, interval);
@@ -45,11 +42,16 @@ const ReminderInfo = ({ reminder }: IReminderInfo) => {
                 <Button onPress={handlePress}>Agendar</Button>
             </Card.Content>
         </Card>
-        {
+        {/* {
             loading ? <Loader /> : (
                 <MeditationList meditations={meditations} />
             )
-        }
+        } */}
+        {/* {
+          inscriptions && inscriptions.map((item:Work) => {
+            return <Text>{item.title}</Text>
+          })
+        } */}
     </View>
     
   );

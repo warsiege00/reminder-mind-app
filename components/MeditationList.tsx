@@ -13,7 +13,7 @@ export const MeditationList = ({ meditations }: IMeditationList) => {
     <View style={styles.container}>
       {meditations && meditations.length > 0 ? (
         <>
-          <Text style={styles.title}>Meditações</Text>
+          <Text style={styles.title}>Lista de Exercícios</Text>
           {meditations.map((item) => (
             <Card key={item.id} style={styles.card}>
               <Card.Content style={styles.cardContent}>
@@ -25,8 +25,13 @@ export const MeditationList = ({ meditations }: IMeditationList) => {
                     params: { id: item.id },
                   }}
                 >
-                  <Text style={styles.meditationTitle}>{item.title}</Text>
-                  {/* <Chip icon="information">{item.moodRecommended}</Chip> */}
+                  <View style={{flexDirection: 'column'}}>
+                    <Text style={styles.meditationTitle}>{item.title}</Text>
+                    <View style={{display: 'flex', justifyContent: 'center'}}>
+                      {/* <FontAwesome size={15} name="book" color={'grey'} /> */}
+                      <Text style={styles.chip}>{item.work}</Text>
+                    </View>
+                  </View>
                 </Link>
               </Card.Content>
             </Card>
@@ -46,7 +51,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   title: {
-    fontSize: 2,
     fontWeight: 'bold',
     marginBottom: 16,
     textAlign: 'center',
@@ -70,4 +74,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  chip: {
+    color: 'grey', 
+    fontWeight: 'bold', 
+    fontStyle: 'italic',
+    paddingVertical: 4,
+    textAlign: 'center',
+  }
 });
